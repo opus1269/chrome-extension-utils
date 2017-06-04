@@ -1,0 +1,51 @@
+{
+  "name": "chrome-extension-utils",
+  "version": "1.0.0",
+  "description": "Utilities for Chrome Extensions",
+  "main": "background.js",
+  "scripts": {
+    "update_savedev": "npm update --save-dev",
+    "prune": "npm prune",
+    "delete_all": "rmdir node_modules /s /q"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opus1269/chrome-extension-utils.git"
+  },
+  "author": "Michael Updike <igreilly1269@gmail.com>",
+  "license": "BSD 3-Clause",
+  "bugs": {
+    "url": "https://github.com/opus1269/chrome-extension-utils/issues"
+  },
+  "homepage": "https://github.com/opus1269/chrome-extension-utils",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^3.16.1",
+    "eslint-config-google": "^0.7.1",
+    "eslint-plugin-html": "^2.0.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^3.0.0",
+    "gulp-clean-css": "^3.4.0",
+    "gulp-crisper": "^1.1.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-html-extract": "^0.3.0",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-jsdoc3": "^1.0.1",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-minify-inline": "^0.2.1",
+    "gulp-polylint": "^1.0.3",
+    "gulp-replace": "^0.5.4",
+    "gulp-size": "^2.1.0",
+    "gulp-strip-line": "0.0.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.8",
+    "gulp-vulcanize": "^6.1.0",
+    "gulp-zip": "^4.0.0",
+    "run-sequence": "^1.2.2",
+    "uglify-es": "^3.0.11",
+    "vulcanize": "^1.15.3"
+  }
+}

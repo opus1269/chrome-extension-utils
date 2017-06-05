@@ -4,29 +4,29 @@
  * https://opensource.org/licenses/Apache-2.0
  * https://github.com/opus1269/chrome-extension-utils/blob/master/LICENSE.md
  */
-window.app = window.app || {};
+window.Chrome = window.Chrome || {};
 
 /**
  * Google Analytics tracking
  * @namespace
  */
-app.CGA = (function() {
+Chrome.GA = (function() {
     'use strict';
 
     /**
      * Google Analytics Event
-     * @typedef {Object} app.CGA.Event
+     * @typedef {Object} Chrome.GA.Event
      * @property {string} eventCategory - category
      * @property {string} eventAction - action
      * @property {string} eventLabel - label
-     * @memberOf app.CGA
+     * @memberOf Chrome.GA
      */
 
     /**
      * Event: called when document and resources are loaded<br />
      * Initialize Google Analytics
      * @private
-     * @memberOf app.CGA
+     * @memberOf Chrome.GA
      */
     function _onLoad() {
         // Standard Google Universal Analytics code
@@ -57,7 +57,7 @@ app.CGA = (function() {
          * @param {string} appName - extension name
          * @param {string} appId - extension Id
          * @param {string} appVersion - extension version
-         * @memberOf app.CGA
+         * @memberOf Chrome.GA
          */
         initialize: function(trackingId, appName, appId, appVersion) {
             ga('create', trackingId, 'auto');
@@ -73,7 +73,7 @@ app.CGA = (function() {
         /**
          * Send a page
          * @param {string} page - page path
-         * @memberOf app.CGA
+         * @memberOf Chrome.GA
          */
         page: function(page) {
             if (page) {
@@ -83,14 +83,14 @@ app.CGA = (function() {
 
         /**
          * Send an event
-         * @param {app.CGA.Event} event - the event type
+         * @param {Chrome.GA.Event} event - the event type
          * @param {?string} [label=null] - override label
          * @param {?string} [action=null] - override action
-         * @memberOf app.CGA
+         * @memberOf Chrome.GA
          */
         event: function(event, label = null, action = null) {
             if (event) {
-                const ev = app.JSONUtils.shallowCopy(event);
+                const ev = Chrome.JSONUtils.shallowCopy(event);
                 ev.hitType = 'event';
                 ev.eventLabel = label ? label : ev.eventLabel;
                 ev.eventAction = action ? action : ev.eventAction;
@@ -102,7 +102,7 @@ app.CGA = (function() {
          * Send an error
          * @param {?string} [label=null] - override label
          * @param {?string} [action=null] - override action
-         * @memberOf app.CGA
+         * @memberOf Chrome.GA
          */
         error: function(label = null, action = null) {
             const ev = {
@@ -122,7 +122,7 @@ app.CGA = (function() {
          * @param {string} message - the error message
          * @param {?string} [stack=null] - error stack
          * @param {boolean} [fatal=null] - true if fatal
-         * @memberOf app.CGA
+         * @memberOf Chrome.GA
          */
         exception: function(message, stack = null, fatal = true) {
             try {

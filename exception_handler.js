@@ -22,14 +22,14 @@
 		if (typeof window.onerror === 'object') {
 			// global error handler
 			window.onerror = function(message, url, line, col, errObject) {
-				if (app && app.CGA) {
+				if (Chrome && Chrome.GA) {
 					let msg = message;
 					let stack = null;
 					if (errObject && errObject.message && errObject.stack) {
 						msg = errObject.message;
 						stack = errObject.stack;
 					}
-					app.CGA.exception(msg, stack);
+					Chrome.GA.exception(msg, stack);
 				}
 			};
 		}

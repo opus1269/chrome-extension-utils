@@ -4,13 +4,13 @@
  * https://opensource.org/licenses/Apache-2.0
  * https://github.com/opus1269/chrome-extension-utils/blob/master/LICENSE.md
  */
-window.app = window.app || {};
+window.Chrome = window.Chrome || {};
 
 /**
  * Fetch with authentication and exponential back-off
  * @namespace
  */
-app.Http = (function() {
+Chrome.Http = (function() {
 	'use strict';
 
 	new ExceptionHandler();
@@ -22,7 +22,7 @@ app.Http = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	const _AUTH_HEADER = 'Authorization';
 
@@ -31,7 +31,7 @@ app.Http = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	const _BEARER = 'Bearer';
 
@@ -40,7 +40,7 @@ app.Http = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	const _MAX_RETRIES = 3;
 
@@ -49,7 +49,7 @@ app.Http = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	const _DELAY = 1000;
 
@@ -67,7 +67,7 @@ app.Http = (function() {
 	 * @param {int} maxRetries - max retries
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	function _processResponse(response, url, opts, isAuth, retryToken, token,
 							interactive, attempt, backoff, maxRetries) {
@@ -111,13 +111,13 @@ app.Http = (function() {
 	 * @param {{}} response - server response
 	 * @returns {Error} details on failure
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	function _getError(response) {
 		let msg = 'Unknown error.';
 		if (response && response.status &&
 			(response.statusText !== undefined)) {
-			const statusMsg = app.CUtils.localize('err_status');
+			const statusMsg = Chrome.Utils.localize('err_status');
 			msg = `${statusMsg}: ${response.status}`;
 			msg += `\n${response.statusText}`;
 		}
@@ -130,7 +130,7 @@ app.Http = (function() {
 	 * @param {boolean} interactive - if true, user initiated
 	 * @returns {Promise.<string>} auth token
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	function _getAuthToken(isAuth, interactive) {
 		if (isAuth) {
@@ -170,7 +170,7 @@ app.Http = (function() {
 	 * @param {int} maxRetries - max retries
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	function _retry(url, opts, isAuth, retryToken, interactive, attempt,
 					maxRetries) {
@@ -196,11 +196,11 @@ app.Http = (function() {
 	 * @param {int} maxRetries - max retries
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	function _retryToken(url, opts, token, interactive, attempt, backoff,
 						maxRetries) {
-		app.CGA.error('Refresh auth token.', 'Http._retryToken');
+		Chrome.GA.error('Refresh auth token.', 'Http._retryToken');
 		return chromep.identity.removeCachedAuthToken({
 			token: token,
 		}).then(() => {
@@ -221,7 +221,7 @@ app.Http = (function() {
 	 * @param {int} maxRetries - max retries on 500 failures
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
-	 * @memberOf app.Http
+	 * @memberOf Chrome.Http
 	 */
 	function _fetch(url, opts, isAuth, retryToken, interactive, attempt,
 					backoff, maxRetries) {
@@ -238,7 +238,7 @@ app.Http = (function() {
 		}).catch((err) => {
 			let msg = err.message;
 			if (msg === 'Failed to fetch') {
-				msg = app.CUtils.localize('err_network');
+				msg = Chrome.Utils.localize('err_network');
 			}
 			throw new Error(msg);
 		});
@@ -255,7 +255,7 @@ app.Http = (function() {
 		 * @param {boolean} [backoff=true] - if true, do exponential back-off
 		 * @param {int} [maxRetries=_MAX_ATTEMPTS] - max retries
 		 * @returns {Promise.<json>} response from server
-		 * @memberOf app.Http
+		 * @memberOf Chrome.Http
 		 */
 		doGet: function(url, isAuth = false, retryToken = false,
 				interactive = false, backoff = true,

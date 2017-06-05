@@ -4,13 +4,13 @@
  * https://opensource.org/licenses/Apache-2.0
  * https://github.com/opus1269/chrome-extension-utils/blob/master/LICENSE.md
  */
-window.app = window.app || {};
+window.Chrome = window.Chrome || {};
 
 /**
  * JSON utilities
  * @namespace
  */
-app.JSONUtils = (function() {
+Chrome.JSONUtils = (function() {
 	'use strict';
 
 	new ExceptionHandler();
@@ -20,14 +20,14 @@ app.JSONUtils = (function() {
 		 * Parse JSON, with exception handling
 		 * @param {!string} jsonString - string to parse
 		 * @returns {?JSON} JSON Object, null on error
-		 * @memberOf app.JSONUtils
+		 * @memberOf Chrome.JSONUtils
 		 */
 		parse: function(jsonString) {
 			let ret = null;
 			try {
 				ret = JSON.parse(jsonString);
 			} catch (err) {
-				app.CGA.exception(`Caught: JSONUtils.parse: ${err.message}`,
+				Chrome.GA.exception(`Caught: JSONUtils.parse: ${err.message}`,
 					err.stack, false);
 			}
 			return ret;
@@ -37,13 +37,13 @@ app.JSONUtils = (function() {
 		 * Return shallow copy of Object
 		 * @param {!Object} object - object to copy
 		 * @returns {?JSON} JSON Object, null on error
-		 * @memberOf app.JSONUtils
+		 * @memberOf Chrome.JSONUtils
 		 */
 		shallowCopy: function(object) {
 			let ret = null;
 			const jsonString = JSON.stringify(object);
 			if (typeof(jsonString) !== 'undefined') {
-				ret = app.JSONUtils.parse(jsonString);
+				ret = Chrome.JSONUtils.parse(jsonString);
 			}
 			return ret;
 		},

@@ -4,13 +4,13 @@
  * https://opensource.org/licenses/Apache-2.0
  * https://github.com/opus1269/chrome-extension-utils/blob/master/LICENSE.md
  */
-window.app = window.app || {};
+window.Chrome = window.Chrome || {};
 
 /**
  * Manage items in localStorage
  * @namespace
  */
-app.Storage = (function() {
+Chrome.Storage = (function() {
 	'use strict';
 
 	new ExceptionHandler();
@@ -20,13 +20,13 @@ app.Storage = (function() {
 		 * Get a JSON parsed value from localStorage
 		 * @param {!string} key - key to get value for
 		 * @returns {?JSON} JSON object, null if key does not exist
-		 * @memberOf app.Storage
+		 * @memberOf Chrome.Storage
 		 */
 		get: function(key) {
 			let item = localStorage.getItem(key);
 			let value = null;
 			if (item !== null) {
-				value = app.JSONUtils.parse(item);
+				value = Chrome.JSONUtils.parse(item);
 			}
 			return value;
 		},
@@ -36,7 +36,7 @@ app.Storage = (function() {
 		 * @param {!string} key - key to get value for
 		 * @param {?int} [def=null] - optional value to return, if NaN
 		 * @returns {int} value as integer, NaN on error
-		 * @memberOf app.Storage
+		 * @memberOf Chrome.Storage
 		 */
 		getInt: function(key, def = null) {
 			let item = localStorage.getItem(key);
@@ -44,7 +44,7 @@ app.Storage = (function() {
 			if (Number.isNaN(value)) {
 				value = (def === null) ? value : def;
 				if (def === null) {
-					app.CGA.error(`NaN value for: ${key}`, 'Storage.getInt');
+					Chrome.GA.error(`NaN value for: ${key}`, 'Storage.getInt');
 				}
 			}
 			return value;
@@ -54,17 +54,17 @@ app.Storage = (function() {
 		 * Get boolean value from localStorage
 		 * @param {!string} key - key to get value for
 		 * @returns {?boolean} value as boolean, null if key does not exist
-		 * @memberOf app.Storage
+		 * @memberOf Chrome.Storage
 		 */
 		getBool: function(key) {
-			return app.Storage.get(key);
+			return Chrome.Storage.get(key);
 		},
 
 		/**
 		 * JSON stringify and save a value to localStorage
 		 * @param {!string} key - key to set value for
 		 * @param {?Object} [value=null] - new value, if null remove item
-		 * @memberOf app.Storage
+		 * @memberOf Chrome.Storage
 		 */
 		set: function(key, value = null) {
 			let val = value;
@@ -83,29 +83,29 @@ app.Storage = (function() {
 		 * @param {string} [keyBool] - key to a boolean value
 		 *                 that is true if the primary key has non-empty value
 		 * @returns {boolean} true if value was set successfully
-		 * @memberOf app.Storage
+		 * @memberOf Chrome.Storage
 		 */
 		safeSet: function(key, value, keyBool) {
 			let ret = true;
-			const oldValue = app.Storage.get(key);
+			const oldValue = Chrome.Storage.get(key);
 			try {
-				app.Storage.set(key, value);
+				Chrome.Storage.set(key, value);
 			} catch (e) {
 				ret = false;
 				if (oldValue) {
 					// revert to old value
-					app.Storage.set(key, oldValue);
+					Chrome.Storage.set(key, oldValue);
 				}
 				if (keyBool) {
 					// revert to old value
 					if (oldValue && oldValue.length) {
-						app.Storage.set(keyBool, true);
+						Chrome.Storage.set(keyBool, true);
 					} else {
-						app.Storage.set(keyBool, false);
+						Chrome.Storage.set(keyBool, false);
 					}
 				}
 				// notify listeners
-				app.Msg.send(app.Msg.STORAGE_EXCEEDED).catch(() => {});
+				Chrome.Msg.send(Chrome.Msg.STORAGE_EXCEEDED).catch(() => {});
 			}
 			return ret;
 		},

@@ -4,13 +4,13 @@
  * https://opensource.org/licenses/Apache-2.0
  * https://github.com/opus1269/chrome-extension-utils/blob/master/LICENSE.md
  */
-window.app = window.app || {};
+window.Chrome = window.Chrome || {};
 
 /**
  * Utility methods
  * @namespace
  */
-app.CUtils = (function() {
+Chrome.Utils = (function() {
 	'use strict';
 
 	new ExceptionHandler();
@@ -18,7 +18,7 @@ app.CUtils = (function() {
 	return {
 		/** Get the extension's name
 		 * @returns {string} Extension name
-		 * @memberOf app.CUtils
+		 * @memberOf Chrome.Utils
 		 */
 		getExtensionName: function() {
 			return `chrome-extension://${chrome.runtime.id}`;
@@ -27,7 +27,7 @@ app.CUtils = (function() {
 		/**
 		 * Get the Extension version
 		 * @returns {string} Extension version
-		 * @memberOf app.CUtils
+		 * @memberOf Chrome.Utils
 		 */
 		getVersion: function() {
 			const manifest = chrome.runtime.getManifest();
@@ -38,7 +38,7 @@ app.CUtils = (function() {
 		 * Get the Chrome version
 		 * @see http://stackoverflow.com/a/4900484/4468645
 		 * @returns {int} Chrome major version
-		 * @memberOf app.CUtils
+		 * @memberOf Chrome.Utils
 		 */
 		getChromeVersion: function() {
 			const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
@@ -49,7 +49,7 @@ app.CUtils = (function() {
 		 * Get the full Chrome version
 		 * @see https://goo.gl/2ITMNO
 		 * @returns {string} Chrome version
-		 * @memberOf app.CUtils
+		 * @memberOf Chrome.Utils
 		 */
 		getFullChromeVersion: function() {
 			const raw = navigator.userAgent;
@@ -59,7 +59,7 @@ app.CUtils = (function() {
         /**
          * Get the OS as a human readable string
          * @returns {Promise.<string>} OS name
-         * @memberOf app.CUtils
+         * @memberOf Chrome.Utils
          */
         getPlatformOS: function() {
             const chromep = new ChromePromise();

@@ -4,35 +4,35 @@
  * https://opensource.org/licenses/Apache-2.0
  * https://github.com/opus1269/chrome-extension-utils/blob/master/LICENSE.md
  */
-window.app = window.app || {};
+window.Chrome = window.Chrome || {};
 
 /**
  * Wrapper for chrome messages
  * @namespace
  */
-app.CMsg = (function() {
+Chrome.Msg = (function() {
 	'use strict';
 
 	new ExceptionHandler();
 
     /**
      * A Chrome message
-     * @typedef {{}} app.CMsg.Message
+     * @typedef {{}} Chrome.Msg.Message
      * @property {string} message - Unique name
      * @property {Error} error - an error
      * @property {string|Object} item - a message specific item
      * @property {boolean} updated - item is new or updated
      * @property {string} key - key name
      * @property {?Object} value - value of key
-     * @memberOf app.CMsg
+     * @memberOf Chrome.Msg
      */
 
     return {
 		/**
 		 * Send a chrome message
-		 * @param {app.CMsg.Message} type - type of message
+		 * @param {Chrome.Msg.Message} type - type of message
 		 * @returns {Promise<JSON>} response JSON
-		 * @memberOf app.CMsg
+		 * @memberOf Chrome.Msg
 		 */
 		send: function(type) {
 			const chromep = new ChromePromise();
@@ -43,7 +43,7 @@ app.CMsg = (function() {
 					!err.message.includes('port closed') &&
 					!err.message.includes('Receiving end does not exist')) {
 					const msg = `type: ${type.message}, ${err.message}`;
-					app.CGA.error(msg, 'Msg.send');
+					Chrome.GA.error(msg, 'Msg.send');
 				}
 				return Promise.reject(err);
 			});
@@ -52,7 +52,7 @@ app.CMsg = (function() {
 		/**
 		 * Add a listener for chrome messages
 		 * @param {Function} listener - function to receive messages
-		 * @memberOf app.CMsg
+		 * @memberOf Chrome.Msg
 		 */
 		listen: function(listener) {
 			chrome.runtime.onMessage.addListener(listener);

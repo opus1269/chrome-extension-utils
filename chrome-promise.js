@@ -1,4 +1,3 @@
-// noinspection ThisExpressionReferencesGlobalObjectJS
 /**
  * chrome-promise 2.0.2
  * https://github.com/tfoxy/chrome-promise
@@ -7,6 +6,8 @@
  * Released under the MIT license
  * Simplified by Mike Updike 2017
  */
+/* eslint-disable */
+// noinspection ThisExpressionReferencesGlobalObjectJS
 
 (function(root, factory) {
 	// Browser globals (root is window)

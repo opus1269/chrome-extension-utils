@@ -50,7 +50,60 @@ Chrome.GA = (function() {
   // listen for document and resources loaded
   window.addEventListener('load', _onLoad);
 
+  /**
+   * Event types
+   * @type {{}}
+   * @property {Chrome.GA.Event} INSTALLED - extension installed
+   * @property {Chrome.GA.Event} MENU - menu selected
+   * @property {Chrome.GA.Event} TOGGLE - setting-toggle
+   * @property {Chrome.GA.Event} LINK - setting-link
+   * @property {Chrome.GA.Event} BUTTON - button click
+   * @property {Chrome.GA.Event} ICON - toolbar icon click
+   * @property {Chrome.GA.Event} CHECK - checkbox click
+   * @const
+   * @memberOf Chrome.GA
+   */
+  const EVENT = {
+    INSTALLED: {
+      eventCategory: 'extension',
+      eventAction: 'installed',
+      eventLabel: '',
+    },
+    MENU: {
+      eventCategory: 'ui',
+      eventAction: 'menuSelect',
+      eventLabel: '',
+    },
+    TOGGLE: {
+      eventCategory: 'ui',
+      eventAction: 'toggle',
+      eventLabel: '',
+    },
+    LINK: {
+      eventCategory: 'ui',
+      eventAction: 'linkSelect',
+      eventLabel: '',
+    },
+    BUTTON: {
+      eventCategory: 'ui',
+      eventAction: 'buttonClicked',
+      eventLabel: '',
+    },
+    ICON: {
+      eventCategory: 'ui',
+      eventAction: 'toolbarIconClicked',
+      eventLabel: '',
+    },
+    CHECK: {
+      eventCategory: 'ui',
+      eventAction: 'checkBoxClicked',
+      eventLabel: '',
+    },
+  };
+
   return {
+    EVENT: EVENT,
+
     /**
      * Initialize analytics
      * @param {string} trackingId - tracking id

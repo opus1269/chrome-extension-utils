@@ -55,5 +55,41 @@ app.CUtils = (function() {
 			const raw = navigator.userAgent;
 			return raw ? raw : 'Unknown';
 		},
-	};
+
+        /**
+         * Get the OS as a human readable string
+         * @returns {Promise.<string>} OS name
+         * @memberOf app.CUtils
+         */
+        getPlatformOS: function() {
+            const chromep = new ChromePromise();
+            return chromep.runtime.getPlatformInfo().then((info) => {
+                let output = 'Unknown';
+                const os = info.os;
+                switch (os) {
+                    case 'win':
+                        output = 'MS Windows';
+                        break;
+                    case 'mac':
+                        output = 'Mac';
+                        break;
+                    case 'android':
+                        output = 'Android';
+                        break;
+                    case 'cros':
+                        output = 'Chrome OS';
+                        break;
+                    case 'linux':
+                        output = 'Linux';
+                        break;
+                    case 'openbsd':
+                        output = 'OpenBSD';
+                        break;
+                    default:
+                        break;
+                }
+                return Promise.resolve(output);
+            });
+        },
+    };
 })();

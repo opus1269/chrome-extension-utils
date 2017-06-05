@@ -6,32 +6,32 @@
  */
 // noinspection ThisExpressionReferencesGlobalObjectJS
 (function(window, factory) {
-	window.ExceptionHandler = factory(window);
+  window.ExceptionHandler = factory(window);
 }(this, function(window) {
-	'use strict';
+  'use strict';
 
-	return ExceptionHandler;
+  return ExceptionHandler;
 
-	/**
-	 * Log Exceptions with analytics. Include: new ExceptionHandler()<br />
-	 * at top of every js file
-	 * @constructor
-	 * @alias ExceptionHandler
-	 */
-	function ExceptionHandler() {
-		if (typeof window.onerror === 'object') {
-			// global error handler
-			window.onerror = function(message, url, line, col, errObject) {
-				if (Chrome && Chrome.GA) {
-					let msg = message;
-					let stack = null;
-					if (errObject && errObject.message && errObject.stack) {
-						msg = errObject.message;
-						stack = errObject.stack;
-					}
-					Chrome.GA.exception(msg, stack);
-				}
-			};
-		}
-	}
+  /**
+   * Log Exceptions with analytics. Include: new ExceptionHandler()<br />
+   * at top of every js file
+   * @constructor
+   * @alias ExceptionHandler
+   */
+  function ExceptionHandler() {
+    if (typeof window.onerror === 'object') {
+      // global error handler
+      window.onerror = function(message, url, line, col, errObject) {
+        if (Chrome && Chrome.GA) {
+          let msg = message;
+          let stack = null;
+          if (errObject && errObject.message && errObject.stack) {
+            msg = errObject.message;
+            stack = errObject.stack;
+          }
+          Chrome.GA.exception(msg, stack);
+        }
+      };
+    }
+  }
 }));

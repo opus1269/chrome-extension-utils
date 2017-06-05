@@ -11,51 +11,51 @@ window.Chrome = window.Chrome || {};
  * @namespace
  */
 Chrome.Msg = (function() {
-	'use strict';
+  'use strict';
 
-	new ExceptionHandler();
+  new ExceptionHandler();
 
+  /**
+   * A Chrome message
+   * @typedef {{}} Chrome.Msg.Message
+   * @property {string} message - Unique name
+   * @property {Error} error - an error
+   * @property {string|Object} item - a message specific item
+   * @property {boolean} updated - item is new or updated
+   * @property {string} key - key name
+   * @property {?Object} value - value of key
+   * @memberOf Chrome.Msg
+   */
+
+  return {
     /**
-     * A Chrome message
-     * @typedef {{}} Chrome.Msg.Message
-     * @property {string} message - Unique name
-     * @property {Error} error - an error
-     * @property {string|Object} item - a message specific item
-     * @property {boolean} updated - item is new or updated
-     * @property {string} key - key name
-     * @property {?Object} value - value of key
+     * Send a chrome message
+     * @param {Chrome.Msg.Message} type - type of message
+     * @returns {Promise<JSON>} response JSON
      * @memberOf Chrome.Msg
      */
+    send: function(type) {
+      const chromep = new ChromePromise();
+      return chromep.runtime.sendMessage(type, null).then((response) => {
+        return Promise.resolve(response);
+      }).catch((err) => {
+        if (err.message &&
+            !err.message.includes('port closed') &&
+            !err.message.includes('Receiving end does not exist')) {
+          const msg = `type: ${type.message}, ${err.message}`;
+          Chrome.GA.error(msg, 'Msg.send');
+        }
+        return Promise.reject(err);
+      });
+    },
 
-    return {
-		/**
-		 * Send a chrome message
-		 * @param {Chrome.Msg.Message} type - type of message
-		 * @returns {Promise<JSON>} response JSON
-		 * @memberOf Chrome.Msg
-		 */
-		send: function(type) {
-			const chromep = new ChromePromise();
-			return chromep.runtime.sendMessage(type, null).then((response) => {
-				return Promise.resolve(response);
-			}).catch((err) => {
-				if (err.message &&
-					!err.message.includes('port closed') &&
-					!err.message.includes('Receiving end does not exist')) {
-					const msg = `type: ${type.message}, ${err.message}`;
-					Chrome.GA.error(msg, 'Msg.send');
-				}
-				return Promise.reject(err);
-			});
-		},
-
-		/**
-		 * Add a listener for chrome messages
-		 * @param {Function} listener - function to receive messages
-		 * @memberOf Chrome.Msg
-		 */
-		listen: function(listener) {
-			chrome.runtime.onMessage.addListener(listener);
-		},
-	};
+    /**
+     * Add a listener for chrome messages
+     * @param {Function} listener - function to receive messages
+     * @memberOf Chrome.Msg
+     */
+    listen: function(listener) {
+      chrome.runtime.onMessage.addListener(listener);
+    },
+  };
 })();

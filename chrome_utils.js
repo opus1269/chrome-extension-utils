@@ -11,85 +11,85 @@ window.Chrome = window.Chrome || {};
  * @namespace
  */
 Chrome.Utils = (function() {
-	'use strict';
+  'use strict';
 
-	new ExceptionHandler();
+  new ExceptionHandler();
 
-	return {
-		/** Get the extension's name
-		 * @returns {string} Extension name
-		 * @memberOf Chrome.Utils
-		 */
-		getExtensionName: function() {
-			return `chrome-extension://${chrome.runtime.id}`;
-		},
+  return {
+    /** Get the extension's name
+     * @returns {string} Extension name
+     * @memberOf Chrome.Utils
+     */
+    getExtensionName: function() {
+      return `chrome-extension://${chrome.runtime.id}`;
+    },
 
-		/**
-		 * Get the Extension version
-		 * @returns {string} Extension version
-		 * @memberOf Chrome.Utils
-		 */
-		getVersion: function() {
-			const manifest = chrome.runtime.getManifest();
-			return manifest.version;
-		},
+    /**
+     * Get the Extension version
+     * @returns {string} Extension version
+     * @memberOf Chrome.Utils
+     */
+    getVersion: function() {
+      const manifest = chrome.runtime.getManifest();
+      return manifest.version;
+    },
 
-		/**
-		 * Get the Chrome version
-		 * @see http://stackoverflow.com/a/4900484/4468645
-		 * @returns {int} Chrome major version
-		 * @memberOf Chrome.Utils
-		 */
-		getChromeVersion: function() {
-			const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-			return raw ? parseInt(raw[2], 10) : false;
-		},
+    /**
+     * Get the Chrome version
+     * @see http://stackoverflow.com/a/4900484/4468645
+     * @returns {int} Chrome major version
+     * @memberOf Chrome.Utils
+     */
+    getChromeVersion: function() {
+      const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+      return raw ? parseInt(raw[2], 10) : false;
+    },
 
-		/**
-		 * Get the full Chrome version
-		 * @see https://goo.gl/2ITMNO
-		 * @returns {string} Chrome version
-		 * @memberOf Chrome.Utils
-		 */
-		getFullChromeVersion: function() {
-			const raw = navigator.userAgent;
-			return raw ? raw : 'Unknown';
-		},
+    /**
+     * Get the full Chrome version
+     * @see https://goo.gl/2ITMNO
+     * @returns {string} Chrome version
+     * @memberOf Chrome.Utils
+     */
+    getFullChromeVersion: function() {
+      const raw = navigator.userAgent;
+      return raw ? raw : 'Unknown';
+    },
 
-        /**
-         * Get the OS as a human readable string
-         * @returns {Promise.<string>} OS name
-         * @memberOf Chrome.Utils
-         */
-        getPlatformOS: function() {
-            const chromep = new ChromePromise();
-            return chromep.runtime.getPlatformInfo().then((info) => {
-                let output = 'Unknown';
-                const os = info.os;
-                switch (os) {
-                    case 'win':
-                        output = 'MS Windows';
-                        break;
-                    case 'mac':
-                        output = 'Mac';
-                        break;
-                    case 'android':
-                        output = 'Android';
-                        break;
-                    case 'cros':
-                        output = 'Chrome OS';
-                        break;
-                    case 'linux':
-                        output = 'Linux';
-                        break;
-                    case 'openbsd':
-                        output = 'OpenBSD';
-                        break;
-                    default:
-                        break;
-                }
-                return Promise.resolve(output);
-            });
-        },
-    };
+    /**
+     * Get the OS as a human readable string
+     * @returns {Promise.<string>} OS name
+     * @memberOf Chrome.Utils
+     */
+    getPlatformOS: function() {
+      const chromep = new ChromePromise();
+      return chromep.runtime.getPlatformInfo().then((info) => {
+        let output = 'Unknown';
+        const os = info.os;
+        switch (os) {
+          case 'win':
+            output = 'MS Windows';
+            break;
+          case 'mac':
+            output = 'Mac';
+            break;
+          case 'android':
+            output = 'Android';
+            break;
+          case 'cros':
+            output = 'Chrome OS';
+            break;
+          case 'linux':
+            output = 'Linux';
+            break;
+          case 'openbsd':
+            output = 'OpenBSD';
+            break;
+          default:
+            break;
+        }
+        return Promise.resolve(output);
+      });
+    },
+  };
 })();

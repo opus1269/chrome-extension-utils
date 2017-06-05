@@ -10,75 +10,73 @@
 // noinspection ThisExpressionReferencesGlobalObjectJS
 
 (function(root, factory) {
-	// Browser globals (root is window)
-	root.ChromePromise = factory(root);
+  // Browser globals (root is window)
+  root.ChromePromise = factory(root);
 }(this, function(root) {
-	'use strict';
-	const slice = Array.prototype.slice;
-	const hasOwnProperty = Object.prototype.hasOwnProperty;
+  'use strict';
+  const slice = Array.prototype.slice;
+  const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-	return ChromePromise;
+  return ChromePromise;
 
+  function ChromePromise(options) {
+    options = options || {};
+    const chrome = options.chrome || root.chrome;
+    const Promise = options.Promise || root.Promise;
+    const runtime = chrome.runtime;
 
-	function ChromePromise(options) {
-		options = options || {};
-		const chrome = options.chrome || root.chrome;
-		const Promise = options.Promise || root.Promise;
-		const runtime = chrome.runtime;
+    fillProperties(chrome, this);
 
-		fillProperties(chrome, this);
+    function setPromiseFunction(fn, thisArg) {
 
+      return function() {
+        const args = slice.call(arguments);
 
-		function setPromiseFunction(fn, thisArg) {
+        return new Promise(function(resolve, reject) {
+          args.push(callback);
 
-			return function() {
-				const args = slice.call(arguments);
+          fn.apply(thisArg, args);
 
-				return new Promise(function(resolve, reject) {
-					args.push(callback);
+          function callback() {
+            const err = runtime.lastError;
+            const results = slice.call(arguments);
+            if (err) {
+              reject(err);
+            } else {
+              switch (results.length) {
+                case 0:
+                  resolve();
+                  break;
+                case 1:
+                  resolve(results[0]);
+                  break;
+                default:
+                  resolve(results);
+              }
+            }
+          }
+        });
 
-					fn.apply(thisArg, args);
+      };
 
-					function callback() {
-						const err = runtime.lastError;
-						const results = slice.call(arguments);
-						if (err) {
-							reject(err);
-						} else {
-							switch (results.length) {
-								case 0:
-									resolve();
-									break;
-								case 1:
-									resolve(results[0]);
-									break;
-								default:
-									resolve(results);
-							}
-						}
-					}
-				});
+    }
 
-			};
+    function fillProperties(source, target) {
+      for (let key in source) {
+        if (hasOwnProperty.call(source, key)) {
+          const val = source[key];
+          const type = typeof val;
 
-		}
-
-		function fillProperties(source, target) {
-			for (let key in source) {
-				if (hasOwnProperty.call(source, key)) {
-					const val = source[key];
-					const type = typeof val;
-
-					if (type === 'object' && !(val instanceof ChromePromise)) {
-						target[key] = {};
-						fillProperties(val, target[key]);
-					} else if (type === 'function') {
-						target[key] = setPromiseFunction(val, source);
-					} else {
-						target[key] = val;
-					}
-				}
-			}
-		}
-	}
+          if (type === 'object' && !(val instanceof ChromePromise)) {
+            target[key] = {};
+            fillProperties(val, target[key]);
+          } else if (type === 'function') {
+            target[key] = setPromiseFunction(val, source);
+          } else {
+            target[key] = val;
+          }
+        }
+      }
+    }
+  }
 }));

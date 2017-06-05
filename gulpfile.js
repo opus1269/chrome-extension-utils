@@ -8,23 +8,23 @@
 
 // paths and files
 const base = {
-	app: 'chrome-extension-utils',
-	src: './',
-	dest: '.tmp/',
+  app: 'chrome-extension-utils',
+  src: './',
+  dest: '.tmp/',
 };
 const path = {
-	scripts: `${base.src}`,
+  scripts: `${base.src}`,
 };
 const files = {
-	scripts: `${path.scripts}*.js`,
+  scripts: `${path.scripts}*.js`,
 };
 
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 // load the rest
 const plugins = require('gulp-load-plugins')({
-	pattern: ['gulp-*', 'gulp.*'],
-	replaceString: /\bgulp[\-.]/,
+  pattern: ['gulp-*', 'gulp.*'],
+  replaceString: /\bgulp[\-.]/,
 });
 
 /**
@@ -39,8 +39,8 @@ const regex = new RegExp(`^(.*?)${base.app}\\\\`, 'g');
  * @param {Event} event - change event
  */
 function onChange(event) {
-	gutil.log('File', gutil.colors.cyan(event.path.replace(regex, '')),
-		'was', gutil.colors.magenta(event.type));
+  gutil.log('File', gutil.colors.cyan(event.path.replace(regex, '')),
+      'was', gutil.colors.magenta(event.type));
 }
 
 // Default - watch for changes in development
@@ -48,17 +48,17 @@ gulp.task('default', ['watch']);
 
 // track changes in development
 gulp.task('watch', ['lintjs'],
-	function() {
-		gulp.watch([files.scripts, 'gulpfile.js', '.eslintrc.js'],
-			['lintjs']).on('change', onChange);
-	});
+    function() {
+      gulp.watch([files.scripts, 'gulpfile.js', '.eslintrc.js'],
+          ['lintjs']).on('change', onChange);
+    });
 
 // lint Javascript
 gulp.task('lintjs', function() {
-	return gulp.src([files.scripts, './gulpfile.js', './.eslintrc.js'])
-		.pipe(plugins.changed(base.dest))
-		.pipe(plugins.eslint())
-		.pipe(plugins.eslint.format())
-		.pipe(plugins.eslint.failAfterError())
-    .pipe(gulp.dest(base.dest));
+  return gulp.src([files.scripts, './gulpfile.js', './.eslintrc.js']).
+      pipe(plugins.changed(base.dest)).
+      pipe(plugins.eslint()).
+      pipe(plugins.eslint.format()).
+      pipe(plugins.eslint.failAfterError()).
+      pipe(gulp.dest(base.dest));
 });

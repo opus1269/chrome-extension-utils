@@ -12,28 +12,28 @@ window.Chrome = window.Chrome || {};
  * @namespace
  */
 Chrome.Locale = (function() {
-    'use strict';
+  'use strict';
 
-    new ExceptionHandler();
+  new ExceptionHandler();
 
-    return {
-        /**
-         * Get the i18n string
-         * @param {string} messageName - key in messages.json
-         * @returns {string} internationalized string
-         * @memberOf Chrome.Locale
-         */
-        localize: function(messageName) {
-            return chrome.i18n.getMessage(messageName);
-        },
+  return {
+    /**
+     * Get the i18n string
+     * @param {string} messageName - key in messages.json
+     * @returns {string} internationalized string
+     * @memberOf Chrome.Locale
+     */
+    localize: function(messageName) {
+      return chrome.i18n.getMessage(messageName);
+    },
 
-        /**
-         * Get the current locale
-         * @returns {string} current locale e.g. en_US
-         * @memberOf Chrome.Locale
-         */
-        getLocale: function() {
-            return chrome.i18n.getMessage('@@ui_locale');
-        },
-    };
+    /**
+     * Get the current locale
+     * @returns {string} current locale e.g. en_US
+     * @memberOf Chrome.Locale
+     */
+    getLocale: function() {
+      return chrome.i18n.getMessage('@@ui_locale');
+    },
+  };
 })();

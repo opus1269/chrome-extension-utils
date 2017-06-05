@@ -117,7 +117,7 @@ app.Http = (function() {
 		let msg = 'Unknown error.';
 		if (response && response.status &&
 			(response.statusText !== undefined)) {
-			const statusMsg = app.Utils.localize('err_status');
+			const statusMsg = app.CUtils.localize('err_status');
 			msg = `${statusMsg}: ${response.status}`;
 			msg += `\n${response.statusText}`;
 		}
@@ -238,7 +238,7 @@ app.Http = (function() {
 		}).catch((err) => {
 			let msg = err.message;
 			if (msg === 'Failed to fetch') {
-				msg = app.Utils.localize('err_network');
+				msg = app.CUtils.localize('err_network');
 			}
 			throw new Error(msg);
 		});

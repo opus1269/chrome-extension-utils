@@ -4,7 +4,7 @@
     "opus1269 <igreilly1269@gmail.com>"
   ],
   "description": "Utilities for Chrome Extensions",
-  "main": "utils.js",
+  "main": "chrome_utils.js",
   "keywords": [
     "chrome",
     "chrome-extension"

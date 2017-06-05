@@ -15,10 +15,22 @@ app.CMsg = (function() {
 
 	new ExceptionHandler();
 
-	return {
+    /**
+     * A Chrome message
+     * @typedef {{}} app.CMsg.Message
+     * @property {string} message - Unique name
+     * @property {Error} error - an error
+     * @property {string|Object} item - a message specific item
+     * @property {boolean} updated - item is new or updated
+     * @property {string} key - key name
+     * @property {?Object} value - value of key
+     * @memberOf app.CMsg
+     */
+
+    return {
 		/**
 		 * Send a chrome message
-		 * @param {app.MyCMsg.Message} type - type of message
+		 * @param {app.CMsg.Message} type - type of message
 		 * @returns {Promise<JSON>} response JSON
 		 * @memberOf app.CMsg
 		 */

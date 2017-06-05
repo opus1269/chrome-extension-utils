@@ -104,7 +104,7 @@ app.GA = (function() {
 		ga('set', 'checkProtocolTask', function() { });
 		ga('set', 'appName', 'Photo Screensaver');
 		ga('set', 'appId', 'photo-screen-saver');
-		ga('set', 'appVersion', app.Utils.getVersion());
+		ga('set', 'appVersion', app.CUtils.getVersion());
 		ga('require', 'displayfeatures');
 	}
 

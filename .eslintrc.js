@@ -28,6 +28,7 @@ module.exports = {
 		'require': true,
 		'ChromePromise': true,
 		'ExceptionHandler': true,
+		'Headers': true,
 		'ga': true,
 	},
 

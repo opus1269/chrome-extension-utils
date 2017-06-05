@@ -27,7 +27,18 @@ Chrome.Msg = (function() {
    * @memberOf Chrome.Msg
    */
 
+  /**
+   * A save attempt to localStorage exceeded its capacity
+   * @type {Chrome.Msg.Message}
+   * @memberOf app.Chrome.Msg
+   */
+  const STORAGE_EXCEEDED = {
+    message: 'storageExceeded',
+  };
+
   return {
+    STORAGE_EXCEEDED: STORAGE_EXCEEDED,
+
     /**
      * Send a chrome message
      * @param {Chrome.Msg.Message} type - type of message

@@ -253,7 +253,7 @@ Chrome.Http = (function() {
      * @param {boolean} [interactive=false] - user initiated, if true
      * @param {boolean} [backoff=true] - if true, do exponential back-off
      * @param {int} [maxRetries=_MAX_ATTEMPTS] - max retries
-     * @returns {Promise.<json>} response from server
+     * @returns {Promise.<JSON>} response from server
      * @memberOf Chrome.Http
      */
     doGet: function(url, isAuth = false, retryToken = false,
@@ -261,6 +261,30 @@ Chrome.Http = (function() {
                     maxRetries = _MAX_RETRIES) {
       let attempt = 0;
       const opts = {method: 'GET', headers: new Headers({})};
+      if (isAuth) {
+        opts.headers.set(_AUTH_HEADER, `${_BEARER} unknown`);
+      }
+      return _fetch(url, opts, isAuth, retryToken, interactive,
+          attempt, backoff, maxRetries);
+    },
+
+    /**
+     * Perform POST request to server, optionally using exponential back-off
+     * and authorization
+     * @param {string} url - server request
+     * @param {boolean} [isAuth=false] - if true, authorization required
+     * @param {boolean} [retryToken=false] - if true, retry with new token
+     * @param {boolean} [interactive=false] - user initiated, if true
+     * @param {boolean} [backoff=true] - if true, do exponential back-off
+     * @param {int} [maxRetries=_MAX_ATTEMPTS] - max retries
+     * @returns {Promise.<JSON>} response from server
+     * @memberOf Chrome.Http
+     */
+    doPost: function(url, isAuth = false, retryToken = false,
+                    interactive = false, backoff = true,
+                    maxRetries = _MAX_RETRIES) {
+      let attempt = 0;
+      const opts = {method: 'POST', headers: new Headers({})};
       if (isAuth) {
         opts.headers.set(_AUTH_HEADER, `${_BEARER} unknown`);
       }

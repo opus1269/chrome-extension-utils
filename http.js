@@ -18,9 +18,20 @@ Chrome.Http = (function() {
   const chromep = new ChromePromise();
 
   /**
+   * Http configuration
+   * @typedef {?Object} Chrome.Http.Config
+   * @property {boolean} [isAuth=false] - if true, authorization required
+   * @property {boolean} [retryToken=false] - if true, retry with new token
+   * @property {boolean} [interactive=false] - user initiated, if true
+   * @property {?string} [token=null] - auth token
+   * @property {boolean} [backoff=true] - if true, do exponential back-off
+   * @property {int} [maxRetries=_MAX_ATTEMPTS] - max retries
+   * @memberOf Chrome.Http
+   */
+
+  /**
    * Authorization header
-   * @const
-   * @default
+   * @type {string}
    * @private
    * @memberOf Chrome.Http
    */
@@ -28,8 +39,7 @@ Chrome.Http = (function() {
 
   /**
    * Bearer parameter for authorized call
-   * @const
-   * @default
+   * @type {string}
    * @private
    * @memberOf Chrome.Http
    */
@@ -37,8 +47,7 @@ Chrome.Http = (function() {
 
   /**
    * Max retries on 500 errors
-   * @const
-   * @default
+   * @type {int}
    * @private
    * @memberOf Chrome.Http
    */
@@ -54,52 +63,59 @@ Chrome.Http = (function() {
   const _DELAY = 1000;
 
   /**
+   * Configuration object
+   * @type {Chrome.Http.Config}
+   * @private
+   * @memberOf Chrome.Http
+   */
+  const _CONFIG = {
+    isAuth: false,
+    retryToken: false,
+    interactive: false,
+    token: null,
+    backoff: true,
+    maxRetries: _MAX_RETRIES,
+  };
+
+  /**
    * Check response and act accordingly
    * @param {{}} response - response from server
    * @param {string} url - server
    * @param {Object} opts - fetch options
-   * @param {boolean} isAuth - true is authorization required
-   * @param {boolean} retryToken - if true, retry with new token
-   * @param {string} token - cached auth token
-   * @param {boolean} interactive - true if user initiated
+   * @param {Chrome.Http.Config} conf - configuration
    * @param {int} attempt - the retry attempt we are on
-   * @param {boolean} backoff - if true, do exponential back-off
-   * @param {int} maxRetries - max retries
    * @returns {Promise.<JSON>} response from server
    * @private
    * @memberOf Chrome.Http
    */
-  function _processResponse(response, url, opts, isAuth, retryToken, token,
-                            interactive, attempt, backoff, maxRetries) {
+  function _processResponse(response, url, opts, conf, attempt) {
     if (response.ok) {
       // request succeeded - woo hoo!
       return response.json();
     }
 
-    if (attempt >= maxRetries) {
+    if (attempt >= conf.maxRetries) {
       // request still failed after maxRetries
       return Promise.reject(_getError(response));
     }
 
     const status = response.status;
 
-    if (backoff && (status >= 500) && (status < 600)) {
+    if (conf.backoff && (status >= 500) && (status < 600)) {
       // temporary server error, maybe. Retry with backoff
-      return _retry(url, opts, isAuth, retryToken, interactive, attempt,
-          maxRetries);
+      return _retry(url, opts, conf, attempt);
     }
 
-    if (isAuth && token && retryToken && (status === 401)) {
+    if (conf.isAuth && conf.token && conf.retryToken && (status === 401)) {
       // could be expired token. Remove cached one and try again
-      return _retryToken(url, opts, token, interactive, attempt,
-          backoff, maxRetries);
+      return _retryToken(url, opts, conf, attempt);
     }
 
-    if (isAuth && interactive && token && retryToken && (status === 403)) {
+    if (conf.isAuth && conf.interactive && conf.token && conf.retryToken &&
+        (status === 403)) {
       // user may have revoked access to extension at some point
       // If interactive, retry so they can authorize again
-      return _retryToken(url, opts, token, interactive, attempt,
-          backoff, maxRetries);
+      return _retryToken(url, opts, conf, attempt);
     }
 
     // request failed
@@ -162,24 +178,21 @@ Chrome.Http = (function() {
    * Retry authorized fetch with exponential back-off
    * @param {string} url - server request
    * @param {Object} opts - fetch options
-   * @param {boolean} isAuth - if true, authorization required
-   * @param {boolean} retryToken - if true, retry with new token
-   * @param {boolean} interactive - true if user initiated
+   * @param {Chrome.Http.Config} conf - configuration
    * @param {int} attempt - the retry attempt we are on
-   * @param {int} maxRetries - max retries
    * @returns {Promise.<JSON>} response from server
    * @private
    * @memberOf Chrome.Http
    */
-  function _retry(url, opts, isAuth, retryToken, interactive, attempt,
-                  maxRetries) {
+  function _retry(url, opts, conf, attempt) {
     attempt++;
     // eslint-disable-next-line promise/avoid-new
     return new Promise((resolve, reject) => {
       const delay = (Math.pow(2, attempt) - 1) * _DELAY;
       setTimeout(() => {
-        return _fetch(url, opts, isAuth, retryToken, interactive,
-            attempt, true, maxRetries).then(resolve, reject);
+        const newConfig = Chrome.JSONUtils.shallowCopy(conf);
+        newConfig.backoff = true;
+        return _fetch(url, opts, conf, attempt).then(resolve, reject);
       }, delay);
     });
   }
@@ -188,23 +201,20 @@ Chrome.Http = (function() {
    * Retry fetch after removing cached auth token
    * @param {string} url - server request
    * @param {Object} opts - fetch options
-   * @param {string} token - cached auth token
-   * @param {boolean} interactive - true if user initiated
+   * @param {Chrome.Http.Config} conf - configuration
    * @param {int} attempt - the retry attempt we are on
-   * @param {boolean} backoff - if true, do exponential back-off
-   * @param {int} maxRetries - max retries
    * @returns {Promise.<JSON>} response from server
    * @private
    * @memberOf Chrome.Http
    */
-  function _retryToken(url, opts, token, interactive, attempt, backoff,
-                       maxRetries) {
+  function _retryToken(url, opts, conf, attempt) {
     Chrome.GA.error('Refresh auth token.', 'Http._retryToken');
     return chromep.identity.removeCachedAuthToken({
-      token: token,
+      token: conf.token,
     }).then(() => {
-      return _fetch(url, opts, true, false, interactive, attempt,
-          backoff, maxRetries);
+      const newConfig = Chrome.JSONUtils.shallowCopy(conf);
+      newConfig.retryToken = false;
+      return _fetch(url, opts, conf, attempt);
     });
   }
 
@@ -212,28 +222,22 @@ Chrome.Http = (function() {
    * Perform fetch, optionally using authorization and exponential back-off
    * @param {string} url - server request
    * @param {Object} opts - fetch options
-   * @param {boolean} isAuth - if true, authorization required
-   * @param {boolean} retryToken - if true, retry with new token
-   * @param {boolean} interactive - if true, user initiated
+   * @param {Chrome.Http.Config} conf - configuration
    * @param {int} attempt - the retry attempt we are on
-   * @param {boolean} backoff - if true, do exponential back-off
-   * @param {int} maxRetries - max retries on 500 failures
    * @returns {Promise.<JSON>} response from server
    * @private
    * @memberOf Chrome.Http
    */
-  function _fetch(url, opts, isAuth, retryToken, interactive, attempt,
-                  backoff, maxRetries) {
+  function _fetch(url, opts, conf, attempt) {
     let token = '';
-    return _getAuthToken(isAuth, interactive).then((authToken) => {
-      if (isAuth) {
+    return _getAuthToken(conf.isAuth, conf.interactive).then((authToken) => {
+      if (conf.isAuth) {
         token = authToken;
         opts.headers.set(_AUTH_HEADER, `${_BEARER} ${token}`);
       }
       return fetch(url, opts);
     }).then((response) => {
-      return _processResponse(response, url, opts, isAuth, retryToken,
-          token, interactive, attempt, backoff, maxRetries);
+      return _processResponse(response, url, opts, conf, attempt);
     }).catch((err) => {
       let msg = err.message;
       if (msg === 'Failed to fetch') {
@@ -243,53 +247,49 @@ Chrome.Http = (function() {
     });
   }
 
+  /**
+   * Do a server request
+   * @param {string} url - server request
+   * @param {Object} opts - fetch options
+   * @param {Chrome.Http.Config} conf - configuration
+   * @returns {Promise.<JSON>} response from server
+   * @private
+   * @memberOf Chrome.Http
+   */
+  function _doIt(url, opts, conf) {
+    conf = (conf === null) ? _CONFIG : conf;
+    if (conf.isAuth) {
+      opts.headers.set(_AUTH_HEADER, `${_BEARER} unknown`);
+    }
+    let attempt = 0;
+    return _fetch(url, opts, conf, attempt);
+  }
+
   return {
+    conf: _CONFIG,
+
     /**
-     * Perform GET request to server, optionally using exponential back-off
-     * and authorization
+     * Perform GET request
      * @param {string} url - server request
-     * @param {boolean} [isAuth=false] - if true, authorization required
-     * @param {boolean} [retryToken=false] - if true, retry with new token
-     * @param {boolean} [interactive=false] - user initiated, if true
-     * @param {boolean} [backoff=true] - if true, do exponential back-off
-     * @param {int} [maxRetries=_MAX_ATTEMPTS] - max retries
+     * @param {Chrome.Http.Config} [conf=null] - configuration
      * @returns {Promise.<JSON>} response from server
      * @memberOf Chrome.Http
      */
-    doGet: function(url, isAuth = false, retryToken = false,
-                    interactive = false, backoff = true,
-                    maxRetries = _MAX_RETRIES) {
-      let attempt = 0;
+    doGet: function(url, conf = null) {
       const opts = {method: 'GET', headers: new Headers({})};
-      if (isAuth) {
-        opts.headers.set(_AUTH_HEADER, `${_BEARER} unknown`);
-      }
-      return _fetch(url, opts, isAuth, retryToken, interactive,
-          attempt, backoff, maxRetries);
+      return _doIt(url, opts, conf);
     },
 
     /**
-     * Perform POST request to server, optionally using exponential back-off
-     * and authorization
+     * Perform POST request
      * @param {string} url - server request
-     * @param {boolean} [isAuth=false] - if true, authorization required
-     * @param {boolean} [retryToken=false] - if true, retry with new token
-     * @param {boolean} [interactive=false] - user initiated, if true
-     * @param {boolean} [backoff=true] - if true, do exponential back-off
-     * @param {int} [maxRetries=_MAX_ATTEMPTS] - max retries
+     * @param {Chrome.Http.Config} [conf=null] - configuration
      * @returns {Promise.<JSON>} response from server
      * @memberOf Chrome.Http
      */
-    doPost: function(url, isAuth = false, retryToken = false,
-                    interactive = false, backoff = true,
-                    maxRetries = _MAX_RETRIES) {
-      let attempt = 0;
+    doPost: function(url, conf = null) {
       const opts = {method: 'POST', headers: new Headers({})};
-      if (isAuth) {
-        opts.headers.set(_AUTH_HEADER, `${_BEARER} unknown`);
-      }
-      return _fetch(url, opts, isAuth, retryToken, interactive,
-          attempt, backoff, maxRetries);
+      return _doIt(url, opts, conf);
     },
   };
 })();

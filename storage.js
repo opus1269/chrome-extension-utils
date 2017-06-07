@@ -19,12 +19,13 @@ Chrome.Storage = (function() {
     /**
      * Get a JSON parsed value from localStorage
      * @param {!string} key - key to get value for
-     * @returns {?JSON} JSON object, null if key does not exist
+     * @param {Object} [def=null] - return value if key not found
+     * @returns {?Object} JSON object, null if key does not exist
      * @memberOf Chrome.Storage
      */
-    get: function(key) {
+    get: function(key, def = null) {
+      let value = def;
       let item = localStorage.getItem(key);
-      let value = null;
       if (item !== null) {
         value = Chrome.JSONUtils.parse(item);
       }

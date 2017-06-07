@@ -60,6 +60,7 @@ Chrome.GA = (function() {
    * @property {Chrome.GA.Event} BUTTON - button click
    * @property {Chrome.GA.Event} ICON - toolbar icon click
    * @property {Chrome.GA.Event} CHECK - checkbox click
+   * @property {Chrome.GA.Event} KEY_COMMAND - keyboard shortcut
    * @const
    * @memberOf Chrome.GA
    */
@@ -97,6 +98,11 @@ Chrome.GA = (function() {
     CHECK: {
       eventCategory: 'ui',
       eventAction: 'checkBoxClicked',
+      eventLabel: '',
+    },
+    KEY_COMMAND: {
+      eventCategory: 'ui',
+      eventAction: 'keyCommand',
       eventLabel: '',
     },
   };

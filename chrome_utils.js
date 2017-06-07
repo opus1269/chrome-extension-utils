@@ -15,6 +15,8 @@ Chrome.Utils = (function() {
 
   new ExceptionHandler();
 
+  const chromep = new ChromePromise();
+
   return {
     /** Get the extension's name
      * @returns {string} Extension name
@@ -62,7 +64,6 @@ Chrome.Utils = (function() {
      * @memberOf Chrome.Utils
      */
     getPlatformOS: function() {
-      const chromep = new ChromePromise();
       return chromep.runtime.getPlatformInfo().then((info) => {
         let output = 'Unknown';
         const os = info.os;
@@ -89,6 +90,39 @@ Chrome.Utils = (function() {
             break;
         }
         return Promise.resolve(output);
+      });
+    },
+
+    /**
+     * Determine if we are MS windows
+     * @returns {Promise.<boolean>} true if MS Windows
+     * @memberOf Chrome.Utils
+     */
+    isWindows: function() {
+      return chromep.runtime.getPlatformInfo().then((info) => {
+        return Promise.resolve((info.os === 'win'));
+      });
+    },
+
+    /**
+     * Determine if we are Chrome OS
+     * @returns {Promise.<boolean>} true if ChromeOS
+     * @memberOf Chrome.Utils
+     */
+    isChromeOS: function() {
+      return chromep.runtime.getPlatformInfo().then((info) => {
+        return Promise.resolve((info.os === 'cros'));
+      });
+    },
+
+    /**
+     * Determine if we are a Mac
+     * @returns {Promise.<boolean>} true if Mac
+     * @memberOf Chrome.Utils
+     */
+    isMac: function() {
+      return chromep.runtime.getPlatformInfo().then((info) => {
+        return Promise.resolve((info.os === 'mac'));
       });
     },
   };

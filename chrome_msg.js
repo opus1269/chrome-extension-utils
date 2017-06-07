@@ -8,6 +8,7 @@ window.Chrome = window.Chrome || {};
 
 /**
  * Wrapper for chrome messages
+ * @see https://developer.chrome.com/extensions/messaging
  * @namespace
  */
 Chrome.Msg = (function() {

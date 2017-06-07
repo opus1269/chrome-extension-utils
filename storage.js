@@ -19,7 +19,7 @@ Chrome.Storage = (function() {
     /**
      * Get a JSON parsed value from localStorage
      * @param {!string} key - key to get value for
-     * @param {Object} [def=null] - return value if key not found
+     * @param {?Object} [def=null] - return value if key not found
      * @returns {?Object} JSON object, null if key does not exist
      * @memberOf Chrome.Storage
      */
@@ -54,11 +54,12 @@ Chrome.Storage = (function() {
     /**
      * Get boolean value from localStorage
      * @param {!string} key - key to get value for
+     * @param {?boolean} [def=null] - return value if key not found
      * @returns {?boolean} value as boolean, null if key does not exist
      * @memberOf Chrome.Storage
      */
-    getBool: function(key) {
-      return Chrome.Storage.get(key);
+    getBool: function(key, def = null) {
+      return Chrome.Storage.get(key, def);
     },
 
     /**

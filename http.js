@@ -133,7 +133,11 @@ Chrome.Http = (function() {
     let msg = 'Unknown error.';
     if (response && response.status &&
         (response.statusText !== undefined)) {
-      const statusMsg = Chrome.Locale.localize('err_status');
+      let statusMsg = Chrome.Locale.localize('err_status');
+      if ((typeof(statusMsg) === 'undefined') || (statusMsg === '')) {
+        // in case localize is missing
+        statusMsg = 'Status';
+      }
       msg = `${statusMsg}: ${response.status}`;
       msg += `\n${response.statusText}`;
     }
@@ -242,6 +246,10 @@ Chrome.Http = (function() {
       let msg = err.message;
       if (msg === 'Failed to fetch') {
         msg = Chrome.Locale.localize('err_network');
+        if ((typeof(msg) === 'undefined') || (msg === '')) {
+          // in case localize is missing
+          msg = err.message;
+        }
       }
       throw new Error(msg);
     });

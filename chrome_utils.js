@@ -125,5 +125,59 @@ Chrome.Utils = (function() {
         return Promise.resolve((info.os === 'mac'));
       });
     },
+
+    /**
+     * Determine if a String is null or whitespace only
+     * @param {?string} str - string to check
+     * @returns {boolean} true is str is whitespace or null
+     * @memberOf Chrome.Utils
+     */
+    isWhiteSpace: function(str) {
+      return (!str || str.length === 0 || /^\s*$/.test(str));
+    },
+
+    /**
+     * Get a random string of the given length
+     * @param {int} [len=8] - length of generated string
+     * @returns {string} a random string
+     * @memberOf Chrome.Utils
+     */
+    getRandomString: function(len = 8) {
+      const POSS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+          'abcdefghijklmnopqrstuvwxyz0123456789';
+      let text = '';
+      for (let i = 0; i < len; i++) {
+        text +=
+            POSS.charAt(Math.floor(Math.random() * POSS.length));
+      }
+      return text;
+    },
+
+    /**
+     * Returns a random integer between min and max inclusive
+     * @param {int} min - min value
+     * @param {int} max - max value
+     * @returns {int} random int
+     * @memberOf Chrome.Utils
+     */
+    getRandomInt: function(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+
+    /**
+     * Randomly sort an Array in place
+     * Fisher-Yates shuffle algorithm.
+     * @param {Array} array - Array to sort
+     * @memberOf Chrome.Utils
+     */
+    shuffleArray: function(array) {
+      const len = array ? array.length : 0;
+      for (let i = len - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    },
   };
 })();

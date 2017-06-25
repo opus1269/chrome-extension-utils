@@ -57,6 +57,7 @@ Chrome.GA = (function() {
    * @property {Chrome.GA.Event} MENU - menu selected
    * @property {Chrome.GA.Event} TOGGLE - setting-toggle
    * @property {Chrome.GA.Event} LINK - setting-link
+   * @property {Chrome.GA.Event} TEXT - setting-text
    * @property {Chrome.GA.Event} BUTTON - button click
    * @property {Chrome.GA.Event} ICON - toolbar icon click
    * @property {Chrome.GA.Event} CHECK - checkbox click
@@ -83,6 +84,11 @@ Chrome.GA = (function() {
     LINK: {
       eventCategory: 'ui',
       eventAction: 'linkSelect',
+      eventLabel: '',
+    },
+    TEXT: {
+      eventCategory: 'ui',
+      eventAction: 'textChanged',
       eventLabel: '',
     },
     BUTTON: {

@@ -127,6 +127,12 @@ Chrome.Utils = (function() {
     },
 
     /**
+     * No operation
+     * @memberOf Chrome.Utils
+     */
+    noop: function() {},
+
+    /**
      * Determine if a String is null or whitespace only
      * @param {?string} str - string to check
      * @returns {boolean} true is str is whitespace or null

@@ -181,7 +181,11 @@
       let ret = '';
       const date = new Date();
       date.setHours(this._hr, this._min);
-      const languages = [navigator.language, 'en-us'];
+      const languages = [];
+      if (typeof(navigator.language) !== 'undefined') {
+        languages.push(navigator.language);
+      }
+      languages.push('en-US');
       const opts = {
         hour: 'numeric',
         minute: '2-digit',

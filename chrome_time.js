@@ -153,6 +153,9 @@
       let timeString = time.toString();
       // strip off all non-digits but :
       timeString = timeString.replace(/[^\d:]/g, '');
+      // strip off everything after 'xx:xx'
+      timeString = timeString.replace(/(.*?:.*?):.*/g, '$1');
+
       return timeString;
     }
 
@@ -178,9 +181,12 @@
      * @returns {string} As string
      */
     toString(frmt = null) {
-      let ret = '';
       const date = new Date();
       date.setHours(this._hr, this._min);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      // fallback in case toLocaleTimeString fails - it does sometimes
+      let ret = date.toTimeString();
       const languages = [];
       if (typeof(navigator.language) !== 'undefined') {
         languages.push(navigator.language);
@@ -194,8 +200,7 @@
       try {
         ret = date.toLocaleTimeString(languages, opts);
       } catch (err) {
-        Chrome.GA.exception(`Caught: Time.toString: ${err.message}`,
-            err.stack, false);
+        Chrome.Utils.noop();
       }
       return ret;
     }

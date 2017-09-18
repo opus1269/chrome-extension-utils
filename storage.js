@@ -112,5 +112,40 @@ Chrome.Storage = (function() {
       }
       return ret;
     },
+    
+    /**
+     * An error that can be persisted
+     * Usage: const err = new LastError(message, title)
+     * @param {?string} message='' - the message
+     * @param {?string} [title=''] - the title
+     * @memberOf Chrome.Storage
+     */
+    LastError: function(message='', title='') {
+      this.name = 'LastError';
+      this.message = message;
+      this.title = title;
+      this.stack = (new Error).stack;
+      Chrome.Storage.LastError.prototype = Object.create(Error.prototype);
+      Chrome.Storage.LastError.prototype.constructor =
+          Chrome.Storage.LastError;
+    },
+    
+    /**
+     * Get the LastError
+     * @returns {Chrome.Storage.LastError} - the LastError
+     * @memberOf Chrome.Storage
+     */
+    getLastError: function() {
+      return Chrome.Storage.get('lastError', new Chrome.Storage.LastError());
+    },
+    
+    /**
+     * Set the LastError
+     * @param {Chrome.Storage.LastError} error - the LastError
+     * @memberOf Chrome.Storage
+     */
+    setLastError: function(error) {
+      Chrome.Storage.set('lastError', error);
+    },
   };
 })();

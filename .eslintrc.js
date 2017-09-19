@@ -18,7 +18,6 @@ module.exports = {
 	},
 
 	'plugins': [
-		'html',
 		'promise',
 	],
 

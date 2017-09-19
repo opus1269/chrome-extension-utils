@@ -20,13 +20,12 @@
   "homepage": "https://github.com/opus1269/chrome-extension-utils",
   "private": true,
   "devDependencies": {
-    "eslint": "^3.16.1",
-    "eslint-config-google": "^0.7.1",
-    "eslint-plugin-html": "^2.0.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "gulp": "^3.9.1",
+    "eslint": "^4.7.1",
+    "eslint-config-google": "^0.9.1",
+    "eslint-plugin-promise": "^3.0.0",
+    "gulp": "^3.0.0",
     "gulp-changed": "^3.0.0",
-    "gulp-eslint": "^3.0.1",
+    "gulp-eslint": "^4.0.0",
     "gulp-load-plugins": "^1.5.0",
     "gulp-util": "^3.0.8"
   },

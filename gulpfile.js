@@ -13,18 +13,19 @@ const base = {
   dest: '.tmp/',
 };
 const path = {
-  scripts: `${base.src}`,
+  scripts: `${base.src}/scripts/`,
 };
 const files = {
   scripts: `${path.scripts}*.js`,
 };
 
+const del = require('del');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 // load the rest
 const plugins = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'gulp.*'],
-  replaceString: /\bgulp[\-.]/,
+  replaceString: /\bgulp[-.]/,
 });
 
 /**
@@ -61,4 +62,9 @@ gulp.task('lintjs', function() {
       pipe(plugins.eslint.format()).
       pipe(plugins.eslint.failAfterError()).
       pipe(gulp.dest(base.dest));
+});
+
+// clean output directories
+gulp.task('clean', () => {
+  return del(base.dest);
 });

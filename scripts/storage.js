@@ -118,6 +118,8 @@ Chrome.Storage = (function() {
      * Usage: const err = new LastError(message, title)
      * @param {?string} [message=''] - the message
      * @param {?string} [title='An error occurred'] - the title
+     * @property {string} name - Error name
+     * @property {string} stack - stack trace
      * @memberOf Chrome.Storage
      */
     LastError: function(message='', title='An error occurred') {

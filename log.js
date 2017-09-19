@@ -30,7 +30,7 @@ Chrome.Log = (function() {
     },
 
     /**
-     * Send an exception
+     * Log an exception
      * @param {Object} exception - the exception
      * @param {?string} [message=null] - the error message
      * @param {boolean} [fatal=true] - true if fatal

@@ -165,38 +165,37 @@ Chrome.GA = (function() {
 
     /**
      * Send an error
-     * @param {?string} [label=null] - override label
-     * @param {?string} [action=null] - override action
+     * @param {?string} [label='unknown'] - override label
+     * @param {?string} [action='unknownMethod'] - override action
      * @memberOf Chrome.GA
      */
-    error: function(label = null, action = null) {
+    error: function(label = 'unknown', action = 'unknownMethod') {
       const ev = {
         hitType: 'event',
         eventCategory: 'error',
-        eventAction: 'unknownMethod',
-        eventLabel: 'Err: unknown',
+        eventAction: action,
+        eventLabel: `Err: ${label}`,
       };
-      ev.eventLabel = label ? `Err: ${label}` : ev.eventLabel;
-      ev.eventAction = action ? action : ev.eventAction;
       ga('send', ev);
-      console.error('Error: ', ev);
     },
 
     /**
      * Send an exception
-     * @param {string} message - the error message
-     * @param {?string} [stack=null] - error stack
-     * @param {boolean} [fatal=null] - true if fatal
+     * @param {Object} exception - the exception
+     * @param {?string} [message=null] - the error message
+     * @param {boolean} [fatal=true] - true if fatal
      * @memberOf Chrome.GA
      */
-    exception: function(message, stack = null, fatal = true) {
+    exception: function(exception, message=null, fatal=false) {
       try {
-        let msg = '';
+        let msg = 'Unknown';
         if (message) {
-          msg += message;
+          msg = message;
+        } else if (exception.message) {
+          msg = exception.message;
         }
-        if (stack) {
-          msg += `\n${stack}`;
+        if (exception.stack) {
+          msg += `\n\n${exception.stack}`;
         }
         const ex = {
           hitType: 'exception',
@@ -204,13 +203,9 @@ Chrome.GA = (function() {
           exFatal: fatal,
         };
         ga('send', ex);
-        console.error('Exception caught: ', ex);
       } catch (err) {
-        // noinspection BadExpressionStatementJS
-        Function.prototype;
+        Chrome.Utils.noop();
       }
     },
   };
 })();
-
-

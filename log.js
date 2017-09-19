@@ -19,7 +19,7 @@ Chrome.Log = (function() {
      * @param {?string} [message='unknown'] - override label
      * @param {?string} [method='unknownMethod'] - override action
      * @param {?string} [title=null] - a title for the error
-     * @memberOf Chrome.GA
+     * @memberOf Chrome.Log
      */
     error: function(message = 'unknown', method = 'unknownMethod',
                     title = null) {
@@ -36,7 +36,7 @@ Chrome.Log = (function() {
      * @param {boolean} [fatal=true] - true if fatal
      * @param {?string} [title='An exception was caught'] 
      * - a title for the error
-     * @memberOf Chrome.GA
+     * @memberOf Chrome.Log
      */
     exception: function(exception, message = null, fatal = false,
                         title='An exception was caught') {

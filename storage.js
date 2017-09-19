@@ -116,11 +116,11 @@ Chrome.Storage = (function() {
     /**
      * An error that can be persisted
      * Usage: const err = new LastError(message, title)
-     * @param {?string} message='' - the message
-     * @param {?string} [title=''] - the title
+     * @param {?string} [message=''] - the message
+     * @param {?string} [title='An error occurred'] - the title
      * @memberOf Chrome.Storage
      */
-    LastError: function(message='', title='') {
+    LastError: function(message='', title='An error occurred') {
       this.name = 'LastError';
       this.message = message;
       this.title = title;

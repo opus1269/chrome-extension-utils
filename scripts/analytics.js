@@ -54,6 +54,7 @@ Chrome.GA = (function() {
    * Event types
    * @type {{}}
    * @property {Chrome.GA.Event} INSTALLED - extension installed
+   * @property {Chrome.GA.Event} UPDATED - extension updated
    * @property {Chrome.GA.Event} MENU - menu selected
    * @property {Chrome.GA.Event} TOGGLE - setting-toggle
    * @property {Chrome.GA.Event} LINK - setting-link
@@ -65,10 +66,15 @@ Chrome.GA = (function() {
    * @const
    * @memberOf Chrome.GA
    */
-  const EVENT = {
+  const _EVENT = {
     INSTALLED: {
       eventCategory: 'extension',
       eventAction: 'installed',
+      eventLabel: '',
+    },
+    UPDATED: {
+      eventCategory: 'extension',
+      eventAction: 'updated',
       eventLabel: '',
     },
     MENU: {
@@ -114,7 +120,7 @@ Chrome.GA = (function() {
   };
 
   return {
-    EVENT: EVENT,
+    EVENT: _EVENT,
 
     /**
      * Initialize analytics

@@ -29,16 +29,38 @@ Chrome.Msg = (function() {
    */
 
   /**
-   * A save attempt to localStorage exceeded its capacity
-   * @type {Chrome.Msg.Message}
+   * Chrome Messages
+   * @type {{}}
+   * @property {Chrome.Msg.Message} HIGHLIGHT - highlight a tab
+   * @property {Chrome.Msg.Message} RESTORE_DEFAULTS - restore default settings
+   * @property {Chrome.Msg.Message} STORAGE_EXCEEDED - local storage save failed
+   * @property {Chrome.Msg.Message} STORE - save value to storage
+   * @const
+   * @private
    * @memberOf Chrome.Msg
    */
-  const STORAGE_EXCEEDED = {
-    message: 'storageExceeded',
+  const _MSG = {
+    HIGHLIGHT: {
+      message: 'highlightTab',
+    },
+    RESTORE_DEFAULTS: {
+      message: 'restoreDefaults',
+    },
+    STORAGE_EXCEEDED: {
+      message: 'storageExceeded',
+    },
+    STORE: {
+      message: 'store',
+      key: '',
+      value: '',
+    },
   };
 
   return {
-    STORAGE_EXCEEDED: STORAGE_EXCEEDED,
+    HIGHLIGHT: _MSG.HIGHLIGHT,
+    RESTORE_DEFAULTS: _MSG.RESTORE_DEFAULTS,
+    STORAGE_EXCEEDED: _MSG.STORAGE_EXCEEDED,
+    STORE: _MSG.STORE,
 
     /**
      * Send a chrome message

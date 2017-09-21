@@ -15,6 +15,8 @@ Chrome.Storage = (function() {
 
   new ExceptionHandler();
 
+  const chromep = new ChromePromise();
+
   return {
     /**
      * Get a JSON parsed value from localStorage
@@ -112,7 +114,7 @@ Chrome.Storage = (function() {
       }
       return ret;
     },
-    
+
     /**
      * An error that can be persisted
      * Usage: const err = new LastError(message, title)
@@ -122,7 +124,7 @@ Chrome.Storage = (function() {
      * @property {string} stack - stack trace
      * @memberOf Chrome.Storage
      */
-    LastError: function(message='', title='An error occurred') {
+    LastError: function(message = '', title = 'An error occurred') {
       this.name = 'LastError';
       this.message = message;
       this.title = title;
@@ -131,23 +133,40 @@ Chrome.Storage = (function() {
       Chrome.Storage.LastError.prototype.constructor =
           Chrome.Storage.LastError;
     },
-    
+
     /**
-     * Get the LastError
-     * @returns {Chrome.Storage.LastError} - the LastError
+     * Get the LastError from chrome.storage.local
+     * @returns {Promise<Chrome.Msg.LastError>} last error
      * @memberOf Chrome.Storage
      */
     getLastError: function() {
-      return Chrome.Storage.get('lastError', new Chrome.Storage.LastError());
+      return chromep.storage.local.get('lastError').then((values) => {
+        if (values.lastError) {
+          return Promise.resolve(values.lastError);
+        }
+        return new Chrome.Storage.LastError();
+      });
     },
-    
+
     /**
-     * Set the LastError
+     * Save the LastError to chrome.storage.local
+     * @see https://developer.chrome.com/apps/storage
      * @param {Chrome.Storage.LastError} error - the LastError
+     * @returns {Promise<void>} void
      * @memberOf Chrome.Storage
      */
     setLastError: function(error) {
-      Chrome.Storage.set('lastError', error);
+      // Save it using the Chrome storage API.
+      return chromep.storage.local.set({'lastError': error});
+    },
+
+    /**
+     * Set the LastError to an empty message in chrome.storage.local
+     * @returns {Promise<void>} void
+     * @memberOf Chrome.Storage
+     */
+    clearLastError: function() {
+      return Chrome.Storage.setLastError(new Chrome.Storage.LastError());
     },
   };
 })();

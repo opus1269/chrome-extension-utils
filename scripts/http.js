@@ -76,6 +76,13 @@ Chrome.Http = (function() {
     backoff: true,
     maxRetries: _MAX_RETRIES,
   };
+  
+  /**
+   * Error message for no internet
+   * @type {string}
+   * @memberOf Chrome.Http
+   */
+  const _ERROR_NETWORK = 'There is no Internet connection';
 
   /**
    * Check response and act accordingly
@@ -284,6 +291,15 @@ Chrome.Http = (function() {
      * @memberOf Chrome.Http
      */
     doGet: function(url, conf = null) {
+      if (!navigator.onLine) {
+        let msg = Chrome.Locale.localize('err_internet');
+        if ((typeof(msg) === 'undefined') || (msg === '')) {
+          // in case localize is missing
+          msg = _ERROR_NETWORK;
+        }
+        Chrome.Log.error(msg, 'Http.doGet');
+        return Promise.reject(new Error(msg));
+      }
       const opts = {method: 'GET', headers: new Headers({})};
       return _doIt(url, opts, conf);
     },
@@ -296,8 +312,17 @@ Chrome.Http = (function() {
      * @memberOf Chrome.Http
      */
     doPost: function(url, conf = null) {
+      if (!navigator.onLine) {
+        let msg = Chrome.Locale.localize('err_internet');
+        if ((typeof(msg) === 'undefined') || (msg === '')) {
+          // in case localize is missing
+          msg = _ERROR_NETWORK;
+        }
+        Chrome.Log.error(msg, 'Http.doPost');
+        return Promise.reject(new Error(msg));
+      }
       const opts = {method: 'POST', headers: new Headers({})};
       return _doIt(url, opts, conf);
     },
   };
-})();
+})(window);

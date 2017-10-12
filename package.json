@@ -13,7 +13,7 @@
     "url": "https://github.com/opus1269/chrome-extension-utils.git"
   },
   "author": "Michael Updike <igreilly1269@gmail.com>",
-  "license": "BSD 3-Clause",
+  "license": "Apache 2.0",
   "bugs": {
     "url": "https://github.com/opus1269/chrome-extension-utils/issues"
   },

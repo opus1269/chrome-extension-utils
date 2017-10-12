@@ -47,7 +47,9 @@ module.exports = {
 		'quote-props': ['error', 'consistent'],
 		'prefer-rest-params': 'off',
 		'valid-jsdoc': ['error', {
-			'requireReturn': false,
+      'requireParamDescription': false,
+      'requireReturnDescription': false,
+      'requireReturn': false,
 			'prefer': {
 				'return': 'returns',
 			},

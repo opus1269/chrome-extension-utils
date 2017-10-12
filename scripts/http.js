@@ -19,7 +19,7 @@ Chrome.Http = (function() {
 
   /**
    * Http configuration
-   * @typedef {?Object} Chrome.Http.Config
+   * @typedef {?{}} Chrome.Http.Config
    * @property {boolean} [isAuth=false] - if true, authorization required
    * @property {boolean} [retryToken=false] - if true, retry with new token
    * @property {boolean} [interactive=false] - user initiated, if true
@@ -51,7 +51,7 @@ Chrome.Http = (function() {
    * @private
    * @memberOf Chrome.Http
    */
-  const _MAX_RETRIES = 3;
+  const _MAX_RETRIES = 4;
 
   /**
    * Delay multiplier for exponential back-off
@@ -76,13 +76,6 @@ Chrome.Http = (function() {
     backoff: true,
     maxRetries: _MAX_RETRIES,
   };
-  
-  /**
-   * Error message for no internet
-   * @type {string}
-   * @memberOf Chrome.Http
-   */
-  const _ERROR_NETWORK = 'There is no Internet connection';
 
   /**
    * Check response and act accordingly
@@ -132,7 +125,7 @@ Chrome.Http = (function() {
   /**
    * Get Error message
    * @param {{}} response - server response
-   * @returns {Error} details on failure
+   * @returns {Error}
    * @private
    * @memberOf Chrome.Http
    */
@@ -291,15 +284,6 @@ Chrome.Http = (function() {
      * @memberOf Chrome.Http
      */
     doGet: function(url, conf = null) {
-      if (!navigator.onLine) {
-        let msg = Chrome.Locale.localize('err_internet');
-        if ((typeof(msg) === 'undefined') || (msg === '')) {
-          // in case localize is missing
-          msg = _ERROR_NETWORK;
-        }
-        Chrome.Log.error(msg, 'Http.doGet');
-        return Promise.reject(new Error(msg));
-      }
       const opts = {method: 'GET', headers: new Headers({})};
       return _doIt(url, opts, conf);
     },
@@ -312,15 +296,6 @@ Chrome.Http = (function() {
      * @memberOf Chrome.Http
      */
     doPost: function(url, conf = null) {
-      if (!navigator.onLine) {
-        let msg = Chrome.Locale.localize('err_internet');
-        if ((typeof(msg) === 'undefined') || (msg === '')) {
-          // in case localize is missing
-          msg = _ERROR_NETWORK;
-        }
-        Chrome.Log.error(msg, 'Http.doPost');
-        return Promise.reject(new Error(msg));
-      }
       const opts = {method: 'POST', headers: new Headers({})};
       return _doIt(url, opts, conf);
     },

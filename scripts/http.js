@@ -30,6 +30,16 @@ Chrome.Http = (function() {
    */
 
   /**
+   * Http response
+   * @typedef {{}} Chrome.Http.Response
+   * @property {boolean} ok - success flag
+   * @property {Function} json - returned data as JSON
+   * @property {int} status - HTTP response code
+   * @property {string} statusText - HTTP response message
+   * @memberOf Chrome.Http
+   */
+
+  /**
    * Authorization header
    * @type {string}
    * @private
@@ -78,7 +88,7 @@ Chrome.Http = (function() {
 
   /**
    * Check response and act accordingly
-   * @param {{}} response - response from server
+   * @param {Chrome.Http.Response} response - server response
    * @param {string} url - server
    * @param {Object} opts - fetch options
    * @param {Chrome.Http.Config} conf - configuration
@@ -123,7 +133,7 @@ Chrome.Http = (function() {
 
   /**
    * Get Error message
-   * @param {{}} response - server response
+   * @param {Chrome.Http.Response} response - server response
    * @returns {Error}
    * @private
    * @memberOf Chrome.Http
@@ -131,7 +141,7 @@ Chrome.Http = (function() {
   function _getError(response) {
     let msg = 'Unknown error.';
     if (response && response.status &&
-        (response.statusText !== undefined)) {
+        (typeof(response.statusText) !== 'undefined')) {
       let statusMsg = Chrome.Locale.localize('err_status');
       if ((typeof(statusMsg) === 'undefined') || (statusMsg === '')) {
         // in case localize is missing

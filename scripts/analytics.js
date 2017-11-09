@@ -148,7 +148,9 @@ Chrome.GA = (function() {
      */
     page: function(page) {
       if (page) {
-        ga('send', 'pageview', page);
+        if (!Chrome.Utils.DEBUG) {
+          ga('send', 'pageview', page);
+        }
       }
     },
 
@@ -165,7 +167,9 @@ Chrome.GA = (function() {
         ev.hitType = 'event';
         ev.eventLabel = label ? label : ev.eventLabel;
         ev.eventAction = action ? action : ev.eventAction;
-        ga('send', ev);
+        if (!Chrome.Utils.DEBUG) {
+          ga('send', ev);
+        }
       }
     },
 
@@ -182,7 +186,9 @@ Chrome.GA = (function() {
         eventAction: action,
         eventLabel: `Err: ${label}`,
       };
-      ga('send', ev);
+      if (!Chrome.Utils.DEBUG) {
+        ga('send', ev);
+      }
     },
 
     /**
@@ -208,7 +214,9 @@ Chrome.GA = (function() {
           exDescription: msg,
           exFatal: fatal,
         };
-        ga('send', ex);
+        if (!Chrome.Utils.DEBUG) {
+          ga('send', ex);
+        }
       } catch (err) {
         Chrome.Utils.noop();
       }

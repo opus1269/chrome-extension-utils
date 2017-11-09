@@ -17,7 +17,22 @@ Chrome.Utils = (function() {
 
   const chromep = new ChromePromise();
 
+  /**
+   * Set to true if development build
+   * @type {boolean}
+   * @private
+   * @memberOf Chrome.Utils
+   */
+  const _DEBUG = false;
+
   return {
+    /**
+     * True if development build
+     * @type {boolean}
+     * @memberOf Chrome.Utils
+     */
+    DEBUG: _DEBUG,
+
     /** Get the extension's name
      * @returns {string} Extension name
      * @memberOf Chrome.Utils

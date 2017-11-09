@@ -56,7 +56,6 @@ Chrome.Http = (function() {
   /**
    * Delay multiplier for exponential back-off
    * @const
-   * @default
    * @private
    * @memberOf Chrome.Http
    */

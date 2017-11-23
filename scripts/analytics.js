@@ -35,8 +35,8 @@ Chrome.GA = (function() {
       i['GoogleAnalyticsObject'] = r;
       // noinspection CommaExpressionJS
       i[r] = i[r] || function() {
-            (i[r].q = i[r].q || []).push(arguments);
-          }, i[r].l = 1 * new Date();
+        (i[r].q = i[r].q || []).push(arguments);
+      }, i[r].l = 1 * new Date();
       // noinspection CommaExpressionJS
       a = s.createElement(o),
           m = s.getElementsByTagName(o)[0];
@@ -169,6 +169,9 @@ Chrome.GA = (function() {
         ev.eventAction = action ? action : ev.eventAction;
         if (!Chrome.Utils.DEBUG) {
           ga('send', ev);
+        } else {
+          // eslint-disable-next-line no-console
+          console.log(ev);
         }
       }
     },
@@ -188,6 +191,8 @@ Chrome.GA = (function() {
       };
       if (!Chrome.Utils.DEBUG) {
         ga('send', ev);
+      } else {
+        console.error(ev);
       }
     },
 
@@ -198,7 +203,7 @@ Chrome.GA = (function() {
      * @param {boolean} [fatal=true] - true if fatal
      * @memberOf Chrome.GA
      */
-    exception: function(exception, message=null, fatal=false) {
+    exception: function(exception, message = null, fatal = false) {
       try {
         let msg = 'Unknown';
         if (message) {
@@ -216,6 +221,8 @@ Chrome.GA = (function() {
         };
         if (!Chrome.Utils.DEBUG) {
           ga('send', ex);
+        } else {
+          console.error(ex);
         }
       } catch (err) {
         Chrome.Utils.noop();

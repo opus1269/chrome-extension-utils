@@ -72,11 +72,10 @@ Chrome.Storage = (function() {
      * @memberOf Chrome.Storage
      */
     set: function(key, value = null) {
-      let val = value;
       if (value === null) {
         localStorage.removeItem(key);
       } else {
-        val = JSON.stringify(value);
+        const val = JSON.stringify(value);
         localStorage.setItem(key, val);
       }
     },

@@ -257,7 +257,7 @@ Chrome.Http = (function() {
         msg = Chrome.Locale.localize('err_network');
         if ((typeof(msg) === 'undefined') || (msg === '')) {
           // in case localize is missing
-          msg = err.message;
+          msg = 'Network error';
         }
       }
       return Promise.reject(new Error(msg));

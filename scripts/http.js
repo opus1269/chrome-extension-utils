@@ -178,7 +178,7 @@ Chrome.Http = (function() {
             'interactive': false,
           });
         } else {
-          throw err;
+          return Promise.reject(err);
         }
       });
     } else {
@@ -260,7 +260,7 @@ Chrome.Http = (function() {
           msg = err.message;
         }
       }
-      throw new Error(msg);
+      return Promise.reject(new Error(msg));
     });
   }
 

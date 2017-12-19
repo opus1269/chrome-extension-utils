@@ -163,9 +163,7 @@ Chrome.Http = (function() {
    */
   function _getAuthToken(isAuth, interactive) {
     if (isAuth) {
-      return chromep.identity.getAuthToken({
-        'interactive': interactive,
-      }).then((token) => {
+      return Chrome.Auth.getToken(interactive).then((token) => {
         return Promise.resolve(token);
       }).catch((err) => {
         if (interactive && (err.message.includes('revoked') ||
@@ -174,9 +172,7 @@ Chrome.Http = (function() {
           // Always returns Authorization page error
           // when first registering, Not sure why
           // Other message is if user revoked access to extension
-          return chromep.identity.getAuthToken({
-            'interactive': false,
-          });
+          return Chrome.Auth.getToken(false);
         } else {
           return Promise.reject(err);
         }

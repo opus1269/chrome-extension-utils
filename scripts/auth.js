@@ -35,16 +35,26 @@ Chrome.Auth = (function() {
 
     /**
      * Remove our cached auth token
+     * @param {string|null} [curToken=null] token to remove
      * @returns {Promise.<string>} the old token
      */
-    removeCachedToken: function() {
+    removeCachedToken: function(curToken = null) {
       let oldToken = null;
-      return this.getToken(false).then((token) => {
-        oldToken = token;
-        return chromep.identity.removeCachedAuthToken({'token': token});
-      }).then(() => {
-        return Promise.resolve(oldToken);
-      });
+      if (curToken === null) {
+        return this.getToken(false).then((token) => {
+          oldToken = token;
+          return chromep.identity.removeCachedAuthToken({'token': token});
+        }).then(() => {
+          return Promise.resolve(oldToken);
+        });
+      } else {
+        oldToken = curToken;
+        return chromep.identity.removeCachedAuthToken({
+          'token': curToken,
+        }).then(() => {
+          return Promise.resolve(oldToken);
+        });
+      }
     },
   };
 })();

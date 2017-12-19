@@ -15,8 +15,6 @@ Chrome.Http = (function() {
 
   new ExceptionHandler();
 
-  const chromep = new ChromePromise();
-
   /**
    * Http configuration
    * @typedef {?{}} Chrome.Http.Config
@@ -199,8 +197,6 @@ Chrome.Http = (function() {
     return new Promise((resolve, reject) => {
       const delay = (Math.pow(2, attempt) - 1) * _DELAY;
       setTimeout(() => {
-        const newConfig = Chrome.JSONUtils.shallowCopy(conf);
-        newConfig.backoff = true;
         return _fetch(url, opts, conf, attempt).then(resolve, reject);
       }, delay);
     });
@@ -217,12 +213,10 @@ Chrome.Http = (function() {
    * @memberOf Chrome.Http
    */
   function _retryToken(url, opts, conf, attempt) {
-    Chrome.GA.error('Refresh auth token.', 'Http._retryToken');
-    return chromep.identity.removeCachedAuthToken({
-      token: conf.token,
-    }).then(() => {
-      const newConfig = Chrome.JSONUtils.shallowCopy(conf);
-      newConfig.retryToken = false;
+    Chrome.GA.error('Refreshed auth token.', 'Http._retryToken');
+    return Chrome.Auth.removeCachedToken(conf.token).then(() => {
+      conf.token = null;
+      conf.retryToken = false;
       return _fetch(url, opts, conf, attempt);
     });
   }

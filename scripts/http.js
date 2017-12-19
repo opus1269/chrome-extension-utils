@@ -242,11 +242,10 @@ Chrome.Http = (function() {
    * @memberOf Chrome.Http
    */
   function _fetch(url, opts, conf, attempt) {
-    let token = '';
     return _getAuthToken(conf.isAuth, conf.interactive).then((authToken) => {
       if (conf.isAuth) {
-        token = authToken;
-        opts.headers.set(_AUTH_HEADER, `${_BEARER} ${token}`);
+        conf.token = authToken;
+        opts.headers.set(_AUTH_HEADER, `${_BEARER} ${conf.token}`);
       }
       return fetch(url, opts);
     }).then((response) => {

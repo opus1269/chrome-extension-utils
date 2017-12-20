@@ -37,6 +37,7 @@ Chrome.Auth = (function() {
      * Remove our cached auth token
      * @param {string|null} [curToken=null] token to remove
      * @returns {Promise.<string>} the old token
+     * @memberOf Chrome.Auth
      */
     removeCachedToken: function(curToken = null) {
       let oldToken = null;

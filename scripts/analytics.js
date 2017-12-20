@@ -59,6 +59,8 @@ Chrome.GA = (function() {
    * @property {Chrome.GA.Event} TOGGLE - setting-toggle
    * @property {Chrome.GA.Event} LINK - setting-link
    * @property {Chrome.GA.Event} TEXT - setting-text
+   * @property {Chrome.GA.Event} SLIDER_VALUE - setting-slider value
+   * @property {Chrome.GA.Event} SLIDER_UNITS - setting-slider unit
    * @property {Chrome.GA.Event} BUTTON - button click
    * @property {Chrome.GA.Event} ICON - toolbar icon click
    * @property {Chrome.GA.Event} CHECK - checkbox click
@@ -95,6 +97,16 @@ Chrome.GA = (function() {
     TEXT: {
       eventCategory: 'ui',
       eventAction: 'textChanged',
+      eventLabel: '',
+    },
+    SLIDER_VALUE: {
+      eventCategory: 'ui',
+      eventAction: 'sliderValueChanged',
+      eventLabel: '',
+    },
+    SLIDER_UNITS: {
+      eventCategory: 'ui',
+      eventAction: 'sliderUnitsChanged',
       eventLabel: '',
     },
     BUTTON: {

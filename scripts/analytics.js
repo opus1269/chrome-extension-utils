@@ -55,6 +55,7 @@ Chrome.GA = (function() {
    * @type {{}}
    * @property {Chrome.GA.Event} INSTALLED - extension installed
    * @property {Chrome.GA.Event} UPDATED - extension updated
+   * @property {Chrome.GA.Event} ALARM - Chrome alarm triggered
    * @property {Chrome.GA.Event} MENU - menu selected
    * @property {Chrome.GA.Event} TOGGLE - setting-toggle
    * @property {Chrome.GA.Event} LINK - setting-link
@@ -77,6 +78,11 @@ Chrome.GA = (function() {
     UPDATED: {
       eventCategory: 'extension',
       eventAction: 'updated',
+      eventLabel: '',
+    },
+    ALARM: {
+      eventCategory: 'alarm',
+      eventAction: 'triggered',
       eventLabel: '',
     },
     MENU: {
